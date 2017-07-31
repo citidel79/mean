@@ -1,7 +1,7 @@
 angular.module('meanhotel')
 .controller('HotelController', HotelController);
 
-function HotelController($routeParams, $route, hotelDataFactory) {
+function HotelController(jwtHelper, $window, $routeParams, $route, hotelDataFactory, AuthFactory) {
     var vm = this;
     var id = $routeParams.id;
 
@@ -14,12 +14,21 @@ function HotelController($routeParams, $route, hotelDataFactory) {
     function _getStarRating(stars) {
         return new Array(stars);
     }
+    
+    vm.login = function() {
+        
+    }
 
+    vm.isLoggedIn = function() {
+        return AuthFactory.isLoggedIn;
+    }
 
     vm.addReview = function() {
         console.log("In Add review");
+        var token = jwtHelper.decodeToken($window.sessionStorage.token);
+        var username = token.username;
         var postData = {
-            name: vm.name,
+            name: username,
             rating: vm.rating,
             review: vm.review
         };
